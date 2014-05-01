@@ -336,11 +336,12 @@ STK500_FLAGS += -I250kHz
 #---------------- Programming Options (avrdude serial bootloader) ----------------
 
 #"C:\arduino\hardware\tools\avr\bin\avrdude" -PCOM3 -c stk500v1 -patmega168 -b19200 -Uflash:w:Simon-PTH-v1.hex -V -F -C"C:\arduino\hardware\tools\avr\etc\avrdude.conf"
-SERIAL_AVRDUDE = C:\Tools\arduino-0022\hardware\tools\avr\bin\avrdude
-SERIAL_AVRDUDE_CONFIG = C:\Tools\arduino-0022\hardware\tools\avr\etc\avrdude.conf
+SERIAL_AVRDUDE = "C:/Program Files (x86)/Arduino/hardware/tools/avr\bin/avrdude"
+SERIAL_AVRDUDE_CONFIG = "C:/Program Files (x86)/Arduino/hardware/tools/avr\etc\avrdude.conf"
 SERIAL_AVRDUDE_PORT = COM3
 SERIAL_AVRDUDE_SPEED = 57600
-SERIAL_AVRDUDE_PROGRAMMER = stk500v1
+#SERIAL_AVRDUDE_PROGRAMMER = stk500v1
+SERIAL_AVRDUDE_PROGRAMMER = arduino
 
 SERIAL_AVRDUDE_FLAGS = -p $(MCU) -P $(SERIAL_AVRDUDE_PORT) -c $(SERIAL_AVRDUDE_PROGRAMMER) -b $(SERIAL_AVRDUDE_SPEED)
 SERIAL_AVRDUDE_FLAGS += -C$(SERIAL_AVRDUDE_CONFIG)
