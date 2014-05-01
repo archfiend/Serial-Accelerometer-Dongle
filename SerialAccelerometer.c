@@ -35,27 +35,38 @@ const unsigned long outputFrequencyLimits[3][7] = {
 {47, 90, 125, 166, 250, 250, 250}
 };
 
+volatile unsigned int tempStuff = 0;
+volatile bool channelChanged = false;
+
 /**************************************************************
 * Define Interrupt Subroutines
 **************************************************************/
 ISR(ADC_vect)
 {
 	cli();
-	//Get the value from the ADC
-	adcReading[currentAxis][currentReading%NUM_READINGS]=ADCL;				//Get the lowest 8 bits of the 10 bit conversion
-	adcReading[currentAxis][currentReading%NUM_READINGS] |= (ADCH << 8);	//Get the upper 2 bits of the 10 bit conversion
+	if (!channelChanged) {
+		//Get the value from the ADC
+		adcReading[currentAxis][currentReading%NUM_READINGS]=ADCL;				//Get the lowest 8 bits of the 10 bit conversion
+		adcReading[currentAxis][currentReading%NUM_READINGS] |= (ADCH << 8);	//Get the upper 2 bits of the 10 bit conversion
 
-	//Update the axis (Read each axis before updating the currentReading parameter.)
-	if(currentAxis == Z_AXIS)
-	{
-		currentAxis = X_AXIS;
-		currentReading++;
+		//Update the axis (Read each axis before updating the currentReading parameter.)
+		if(currentAxis == Z_AXIS)
+		{
+			currentAxis = X_AXIS;
+			currentReading++;
+		}
+		else currentAxis--;
+		
+		//Update the ADC Channel to get the value of the next axis
+	    ADMUX = (ADMUX & 0xF0);	//Mask OFF the previous ADC channel
+		ADMUX |= (currentAxis & 0x0F);		//Set the new ADC channel		
+		channelChanged = true;	//set channel change flag so that next values are discarded
 	}
-	else currentAxis--;
-	
-	//Update the ADC Channel to get the value of the next axis
-    ADMUX = (ADMUX & 0xF0);	//Mask OFF the previous ADC channel
-	ADMUX |= (currentAxis & 0x0F);		//Set the new ADC channel	
+	else {
+		tempStuff = ADCL;		//throw away first reading
+		tempStuff = ADCH;		//throw away first reading
+		channelChanged = false;	//reset flag
+	}
 	
 	sei();
 }
@@ -400,7 +411,7 @@ char configMenu(struct settings* menuSettings, struct sensorReadings* menuCalibr
 {
 	//Display the Config Menu welcome dialoge
 	printf("--- Serial Accelerometer Dongle MMA7361 ---\n\r");
-	printf("          Firmware Version 6.0\n\n\r");
+	printf("          Firmware Version 6.1\n\n\r");
 	printf("Select a menu item to continue:\n\r");
 	//Display the config menu options
 	printf("[1] Calibrate (Current Calibration Values: %ld, %ld, %ld)\n\r", menuCalibrationValues->x, menuCalibrationValues->y, menuCalibrationValues->z);
