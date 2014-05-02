@@ -9,9 +9,9 @@ Build and Programming Instructions
 
 4.  Navigate to source directory
 
-5.  Run make
+5.  Run `make`
 
-6.  Run make program_serial
+6.  Run `make program_serial`
 
 
 
