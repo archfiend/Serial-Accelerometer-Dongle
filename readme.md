@@ -25,5 +25,3 @@ and com port
 (x86)/Arduino/hardware/tools/avr\etc\avrdude.conf" `
 
 `SERIAL_AVRDUDE_PORT = COM3 `
-
-`SERIAL_AVRDUDE_SPEED = 57600`
