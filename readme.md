@@ -15,7 +15,7 @@ Build and Programming Instructions
 
 
 
-Note: ensure the following values match your setup, arduino install directory
+Note: ensure the following makefile values match your setup, arduino install directory
 and com port
 
 `SERIAL_AVRDUDE = "C:/Program Files
